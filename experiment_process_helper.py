@@ -1,15 +1,16 @@
-import numpy as np
 from os.path import join
+
+import numpy as np
+
+from audio_preprocessing import getMFCCBands2DMadmom
 from src.labParser import lab2WordList
+from src.labWriter import onsetLabWriter
 from src.scoreParser import csvDurationScoreParser
 from src.scoreParser import csvScorePinyinParser
 from src.textgridParser import textGrid2WordList
 from src.textgridParser import wordListsParseByLines
-from src.labWriter import onsetLabWriter
 from src.utilFunctions import featureReshape
 from src.utilFunctions import getOnsetFunction
-
-from audio_preprocessing import getMFCCBands2DMadmom
 
 
 def data_parser(artist_path,
@@ -279,7 +280,7 @@ def peak_picking_detected_onset_saver_schluter(pp_threshold,
 
 def odf_calculation_no_crnn(mfcc,
                             mfcc_reshaped,
-                            filename_keras_cnn_0,
+                            model_name,
                             model_keras_cnn_0,
                             architecture,
                             frame_start,
@@ -299,7 +300,7 @@ def odf_calculation_no_crnn(mfcc,
     mfcc_reshaped_line = mfcc_reshaped[frame_start:frame_end]
     mfcc_reshaped_line = np.expand_dims(mfcc_reshaped_line, axis=1)
 
-    if 'joint' not in filename_keras_cnn_0:
+    if 'joint' not in model_name:
         obs = getOnsetFunction(observations=mfcc_reshaped_line,
                                model=model_keras_cnn_0,
                                method=architecture)

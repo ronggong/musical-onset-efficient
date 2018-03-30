@@ -1,0 +1,1 @@
+feature_data_path = '/media/gong/ec990efa-9ee0-4693-984b-29372dcea0d1/Data/RongGong/syllableSeg'
