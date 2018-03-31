@@ -67,7 +67,7 @@ def jan_original(filter_density,
                     metrics=['accuracy'],
                     sample_weight_mode='temporal')
 
-    print(model_1.summary())
+    # print(model_1.summary())
 
     return model_1
 

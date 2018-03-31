@@ -7,10 +7,10 @@ from file_path_shared import feature_data_path
 root_path = join(dirname(__file__), '..')
 
 # nacta dataset part 1
-nacta_dataset_root_path = '/media/gong/ec990efa-9ee0-4693-984b-29372dcea0d1/Data/RongGong/jingju_a_cappella_singing_dataset'
+nacta_dataset_root_path = '/Users/ronggong/Documents_using/MTG document/Jingju arias/jingju_a_cappella_singing_dataset'
 
 # nacta 2017 dataset part 2
-nacta2017_dataset_root_path = '/media/gong/ec990efa-9ee0-4693-984b-29372dcea0d1/Data/RongGong/jingju_a_cappella_singing_dataset_extended_nacta2017'
+nacta2017_dataset_root_path = '/Users/ronggong/Documents_using/MTG document/Jingju arias/jingju_a_cappella_singing_dataset_extended_nacta2017'
 
 nacta2017_wav_path = join(nacta2017_dataset_root_path, 'wav')
 nacta2017_textgrid_path = join(nacta2017_dataset_root_path, 'textgridDetails')

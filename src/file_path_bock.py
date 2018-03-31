@@ -9,7 +9,7 @@ root_path = join(dirname(__file__), '..')
 weighting_str = \
     'simpleSampleWeighting' if varin['sample_weighting'] == 'simpleWeighting' else 'positiveThreeSampleWeighting'
 
-bock_dataset_root_path = '/media/gong/ec990efa-9ee0-4693-984b-29372dcea0d1/Data/RongGong/onsets'
+bock_dataset_root_path = '/Users/ronggong/Documents_using/MTG document/dataset/onsets'
 
 bock_audio_path = join(bock_dataset_root_path, 'audio')
 
