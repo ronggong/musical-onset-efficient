@@ -18,7 +18,7 @@ varin['delta_mode'] = 'proportion'
 
 varin['delta'] = 0.35
 
-varin['plot'] = False
+varin['plot'] = True
 
 varin['decoding'] = 'peakPicking'
 
