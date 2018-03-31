@@ -5,18 +5,15 @@ import pickle
 import cPickle
 import numpy as np
 from keras.models import load_model
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "./src/"))
+
 from experiment_process_helper import odf_calculation_crnn
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../src/"))
-
 from audio_preprocessing import getMFCCBands2DMadmom
 from utilFunctions import featureReshape
 from utilFunctions import smooth_obs
 from training_scripts.models_CRNN import jan_original
 from plot_code import plot_jingju_odf_colab
-
-hopsize_t = 0.01
-fs = 44100
 
 
 def feature_preprocessing(feature, scaler):
@@ -35,11 +32,17 @@ def odf_postprocessing(odf):
     return odf
 
 
+# parameters
+hopsize_t = 0.01
+fs = 44100
+
+# pretrained model path
 path_models_jingju = './pretrained_models/jingju/simpleWeighting'
 path_models_bock = './pretrained_models/bock/simpleWeighting'
 
 wav_jingju = './inputs/audio_5.wav'
 
+# load scaler
 path_scaler_no_rnn = os.path.join(path_models_jingju, 'scaler_jan_no_rnn.pkl')
 scaler_no_rnn = pickle.load(open(path_scaler_no_rnn))
 

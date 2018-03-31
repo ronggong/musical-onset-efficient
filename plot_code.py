@@ -1,5 +1,5 @@
-import matplotlib
-matplotlib.use('Tkagg')
+# import matplotlib
+# matplotlib.use('Tkagg')
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -157,12 +157,12 @@ def plot_jingju_odf_colab(log_mel,
 
     ax9 = plt.subplot(14, 1, 9, sharex=ax1)
     plt.plot(np.arange(0, len(odf_9_layers_cnn)) * hopsize_t, odf_9_layers_cnn)
-    ax9.set_ylabel('ODF 9 layers CNN', fontsize=12)
+    ax9.set_ylabel('ODF \n9 layers CNN', fontsize=12)
     ax9.axis('tight')
 
     ax10 = plt.subplot(14, 1, 10, sharex=ax1)
     plt.plot(np.arange(0, len(odf_5_layers_cnn)) * hopsize_t, odf_5_layers_cnn)
-    ax10.set_ylabel('ODF 5 layers CNN', fontsize=12)
+    ax10.set_ylabel('ODF \n5 layers CNN', fontsize=12)
     ax10.axis('tight')
 
     ax11 = plt.subplot(14, 1, 11, sharex=ax1)
