@@ -4,6 +4,15 @@
 The code aims to help reproduce the results in the work:
 >Toward an efficient and reproducible deep learning model for musical onset detection
 
+## Pre-trained models:
+[pre-trained models link](https://drive.google.com/open?id=1DFB53P4Fz_ixoVFd9fMpW7nvstaK_wuA)
+
+## Full results (precision, recall, F1):
+[full results link](https://drive.google.com/open?id=100RKdVYwsW_WDyd6aDs0YUic84hEdwBl)
+
+## Statistical significance calculation data
+5 times training results for jingju dataset and 8 folds results for Böck dataset.  
+[link](https://drive.google.com/open?id=1B1SroQRdsqOjKexA6ICinr3hbPk_jkdZ)
 
 ## Supplementary information -- loss curves
 Bock dataset Bidi LSTMs 100 losses (fold 2)
