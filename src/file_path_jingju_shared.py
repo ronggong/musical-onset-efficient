@@ -6,13 +6,11 @@ from file_path_shared import feature_data_path
 #  audio and annotation root path
 root_path = join(dirname(__file__), '..')
 
-# nacta 2017 dataset part 2
-# nacta2017_dataset_root_path = '/Users/gong/Documents/MTG document/Jingju arias/jingju_a_cappella_singing_dataset_extended_nacta2017'
-nacta2017_dataset_root_path = '/media/gong/ec990efa-9ee0-4693-984b-29372dcea0d1/Data/RongGong/jingju_a_cappella_singing_dataset_extended_nacta2017'
-
 # nacta dataset part 1
-# nacta_dataset_root_path = '/Users/gong/Documents/MTG document/Jingju arias/jingju_a_cappella_singing_dataset'
 nacta_dataset_root_path = '/media/gong/ec990efa-9ee0-4693-984b-29372dcea0d1/Data/RongGong/jingju_a_cappella_singing_dataset'
+
+# nacta 2017 dataset part 2
+nacta2017_dataset_root_path = '/media/gong/ec990efa-9ee0-4693-984b-29372dcea0d1/Data/RongGong/jingju_a_cappella_singing_dataset_extended_nacta2017'
 
 nacta2017_wav_path = join(nacta2017_dataset_root_path, 'wav')
 nacta2017_textgrid_path = join(nacta2017_dataset_root_path, 'textgridDetails')
@@ -41,10 +39,8 @@ else:
     nacta2017_score_unified_path = nacta2017_score_pinyin_path
     nacta_score_unified_path = nacta_score_pinyin_path
 
-jingju_cnn_model_path = join(root_path, 'cnnModels', 'jingju', varin['sample_weighting'])
+jingju_cnn_model_path = join(root_path, 'pretrained_models', 'jingju', varin['sample_weighting'])
 
-jingju_scaler_path = join(root_path, 'cnnModels', 'jingju', 'scalers')
-
-cnnModels_path = join(root_path, 'cnnModels', 'jingju')
+cnnModels_path = join(root_path, 'pretrained_models', 'jingju')
 
 artist_filter_feature_data_path = join(feature_data_path, 'artist_filter')

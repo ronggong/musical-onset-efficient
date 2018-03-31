@@ -58,7 +58,7 @@ if mth_ODF == 'jan':
         # cnnModel_name = 'jan_artist_filter_deep_strong_front'
         filename_keras_cnn_0 = 'jan_joint_subset_series'
         cnnModel_name = 'jan_artist_filter_joint_subset_series'
-        # TODO use schluter to evaluate jingju
+        # TODO use bock to evaluate jingju
         # filename_keras_cnn_0 = 'keras.cnn_syllableSeg_jan_artist_filter_less_deep_deep_feature_extraction_schluter'
         # cnnModel_name = 'jan_artist_filter_less_deep_deep_feature_extraction_schluter'
 
@@ -139,7 +139,7 @@ else:
     if 'joint' in filename_keras_cnn_0:
         filename_scaler_onset = 'scaler_joint_subset.pkl'
     else:
-        # TODO use schluter to evaluate jingju
+        # TODO use bock to evaluate jingju
         filename_scaler_onset = 'scaler_jan_no_rnn.pkl'
         # filename_scaler_onset = 'scaler_jan_madmom_simpleSampleWeighting_early_stopping_schluter_jingju_dataset_'
 

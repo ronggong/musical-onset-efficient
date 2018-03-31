@@ -1,0 +1,11 @@
+scipy==1.0.0
+matplotlib==2.1.2
+numpy==1.14.1
+madmom==0.15.1
+Keras==2.1.4
+h5py==2.7.1
+Cython==0.27.3
+zhon==1.1.5
+pinyin==0.4.0
+six==1.11.0
+scikit_learn==0.19.1

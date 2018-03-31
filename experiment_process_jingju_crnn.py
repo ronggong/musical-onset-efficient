@@ -2,6 +2,7 @@
 import pickle
 import os
 import sys
+import shutil
 from os import makedirs
 from os.path import isfile
 from os.path import exists
@@ -10,7 +11,7 @@ import numpy as np
 import pyximport
 from madmom.features.onsets import OnsetPeakPickingProcessor
 
-from eval_demo import eval_write_2_txt
+from eval_jingju import eval_write_2_txt
 from experiment_process_helper import boundary_decoding
 from experiment_process_helper import data_parser
 from experiment_process_helper import get_boundary_list
@@ -20,8 +21,8 @@ from experiment_process_helper import odf_calculation_crnn
 from experiment_process_helper import write_results_2_txt_jingju
 from plot_code import plot_jingju
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "../src/"))
-sys.path.append(os.path.join(os.path.dirname(__file__), "../training_scripts/"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "./src/"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "./training_scripts/"))
 
 from parameters_jingju import *
 from file_path_jingju_shared import *
@@ -225,6 +226,11 @@ def viterbi_subroutine(test_nacta_2017,
             # load the model weights
             model_keras_cnn_0.load_weights(full_path_model + str(ii) + '.h5')
 
+            # delete detection results path if it exists
+            detection_results_path_model = join(detection_results_path + str(ii))
+            if os.path.exists(detection_results_path_model) and os.path.isdir(detection_results_path + str(ii)):
+                shutil.rmtree(detection_results_path + str(ii))
+
             if varin['dataset'] != 'ismir':
                 # evaluate nacta 2017 data set
                 batch_process_onset_detection(wav_path=nacta2017_wav_path,
@@ -254,7 +260,8 @@ def viterbi_subroutine(test_nacta_2017,
                                               obs_cal=obs_cal,
                                               decoding_method='viterbi',
                                               architecture=architecture,
-                                              stateful=stateful)
+                                              stateful=stateful,
+                                              len_seq=len_seq)
         else:
             eval_results_decoding_path = detection_results_path + str(ii)
 
@@ -575,7 +582,7 @@ def run_process_jingju_crnn(architecture):
     else:
         raise ValueError('There is no such architecture %s for CRNN.' % architecture)
 
-    scaler_artist_filter_phrase_model_path = join(jingju_scaler_path, 'scaler_jingju_crnn_phrase.pkl')
+    scaler_artist_filter_phrase_model_path = join(jingju_cnn_model_path, 'scaler_jingju_crnn_phrase.pkl')
 
     detection_results_path = join(root_path, 'eval', 'results', cnnModel_name)
 

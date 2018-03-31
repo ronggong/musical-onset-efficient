@@ -58,14 +58,15 @@ def getOnsetFunction(observations, model, method):
     :return:
     """
 
-    if 'jordi' in method:
-        observations = [observations, observations, observations, observations, observations, observations]
-    elif 'feature_extractor' in method:
+    # if 'jordi' in method:
+    #     observations = [observations, observations, observations, observations, observations, observations]
+    if 'feature_extractor' in method:
         observations = [observations, observations]
 
     obs = model.predict(observations, batch_size=128, verbose=2)
 
     return obs
+
 
 def trackOnsetPosByPath(path, idx_syllable_start_state):
     idx_onset = []
@@ -73,6 +74,7 @@ def trackOnsetPosByPath(path, idx_syllable_start_state):
         if path[ii+1] != path[ii] and path[ii+1] in idx_syllable_start_state:
             idx_onset.append(ii)
     return idx_onset
+
 
 def late_fusion_calc(obs_0, obs_1, mth=0, coef=0.5):
     """

@@ -4,6 +4,7 @@ import gzip
 import pickle
 import os
 import sys
+import shutil
 from os import makedirs
 from os.path import exists
 from os.path import isfile
@@ -13,7 +14,7 @@ import pyximport
 from keras.models import load_model
 from madmom.features.onsets import OnsetPeakPickingProcessor
 
-from eval_demo import eval_write_2_txt
+from eval_jingju import eval_write_2_txt
 from experiment_process_helper import boundary_decoding
 from experiment_process_helper import data_parser
 from experiment_process_helper import get_boundary_list
@@ -222,6 +223,11 @@ def viterbi_subroutine(test_nacta_2017,
             # print(model_keras_cnn_0.summary())
             print('Model name:', full_path_model)
 
+            # delete detection results path if it exists
+            detection_results_path_model = join(detection_results_path + str(ii))
+            if os.path.exists(detection_results_path_model) and os.path.isdir(detection_results_path + str(ii)):
+                shutil.rmtree(detection_results_path + str(ii))
+
             if varin['dataset'] != 'ismir':
                 # nacta2017
                 batch_process_onset_detection(wav_path=nacta2017_wav_path,
@@ -319,6 +325,12 @@ def peak_picking_subroutine(test_nacta_2017,
                 scaler = pickle.load(open(full_path_scaler))
 
             model_keras_cnn_0 = load_model(full_path_model + str(ii) + '.h5')
+
+            # delete detection results path if it exists
+            detection_results_path_model = join(detection_results_path + str(ii))
+            if os.path.exists(detection_results_path_model) and os.path.isdir(detection_results_path + str(ii)):
+                shutil.rmtree(detection_results_path + str(ii))
+
         else:
             model_keras_cnn_0 = None
             scaler = None
@@ -582,14 +594,14 @@ def run_process_jingju_no_rnn(architecture):
 
     # where we have the dumped features
     if 'pretrained' in architecture:
-        cnnModels_path = join(root_path, 'cnnModels', 'schluter')
+        cnnModels_path = join(root_path, 'pretrained_models', 'bock')
     else:
-        cnnModels_path = join(root_path, 'cnnModels', 'jingju')
+        cnnModels_path = join(root_path, 'pretrained_models', 'jingju')
 
     if 'joint' in filename_keras_cnn_0:
         filename_scaler_onset = 'scaler_joint_subset.pkl'
     elif 'pretrained' in architecture:
-        filename_scaler_onset = 'scaler_jan_madmom_simpleSampleWeighting_early_stopping_'
+        filename_scaler_onset = 'scaler_bock_'
     else:
         filename_scaler_onset = 'scaler_jan_no_rnn.pkl'
 

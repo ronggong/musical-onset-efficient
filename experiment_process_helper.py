@@ -215,7 +215,7 @@ def write_results_2_txt_schluter(filename,
                                  recall_precision_f1_overall):
 
     """
-    write the schluter evaluation results to text
+    write the bock evaluation results to text
     :param filename:
     :param append_write:
     :param best_th:
@@ -258,7 +258,7 @@ def peak_picking_detected_onset_saver_schluter(pp_threshold,
                                                filename,
                                                hopsize_t,
                                                OnsetPeakPickingProcessor,
-                                               eval_results_path):
+                                               detection_results_path):
 
     # madmom peak picking
     arg_pp = {'threshold': pp_threshold,
@@ -271,7 +271,7 @@ def peak_picking_detected_onset_saver_schluter(pp_threshold,
     detected_onsets = peak_picking.process(obs_i)
 
     # save detected onsets
-    filename_syll_lab = join(eval_results_path, model_name_0 + model_name_1, filename + '.syll.lab')
+    filename_syll_lab = join(detection_results_path, model_name_0 + model_name_1, filename + '.syll.lab')
 
     onsetLabWriter(detected_onsets, filename_syll_lab)
 
@@ -378,7 +378,7 @@ def odf_calculation_schluter(audio_filename,
                              fs,
                              hopsize_t,
                              channel,
-                             no_dense_str):
+                             architecture):
 
     if channel == 1:
         # 1 channel input
@@ -398,7 +398,7 @@ def odf_calculation_schluter(audio_filename,
 
     obs = getOnsetFunction(observations=mfcc_reshaped,
                            model=model_keras_cnn_0,
-                           method=no_dense_str)
+                           method=architecture)
     obs_i = obs[:, 0]
 
     return obs_i, mfcc

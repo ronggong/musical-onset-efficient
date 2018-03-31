@@ -17,10 +17,10 @@ def annotationCvParser(annotation_filename):
 if __name__ == '__main__':
     from file_path_bock import *
 
-    test_annotation_filename = join(schluter_annotations_path, 'ah_development_guitar_2684_TexasMusicForge_Dandelion_pt1.onsets')
+    test_annotation_filename = join(bock_annotations_path, 'ah_development_guitar_2684_TexasMusicForge_Dandelion_pt1.onsets')
     list_onset_time = annotationCvParser(test_annotation_filename)
     print(list_onset_time)
 
-    test_cv_filename = join(schluter_cv_path, '8-fold_cv_random_0.fold')
+    test_cv_filename = join(bock_cv_path, '8-fold_cv_random_0.fold')
     list_test_filename = annotationCvParser(test_cv_filename)
     print(list_test_filename)
