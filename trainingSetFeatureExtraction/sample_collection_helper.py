@@ -7,6 +7,7 @@ from sklearn import preprocessing
 sys.path.append(os.path.join(os.path.dirname(__file__), "../src/"))
 
 from phonemeMap import dic_pho_label
+from parameters_jingju import hopsize_t
 
 
 def feature_label_concatenation(mfcc_p, mfcc_n, scaling=False):
@@ -259,3 +260,34 @@ def feature_onset_phrase_label_sample_weights(frames_onset, frame_start, frame_e
     label[frames_onset_p25 - frame_start] = 1
 
     return mfcc_line, label, sample_weights
+
+
+def get_onset_in_frame_helper(recording_name, idx, lab, u_list):
+    """
+    retrieve onset time of the syllable from textgrid
+    :param recording_name:
+    :param idx:
+    :param lab:
+    :param u_list:
+    :return:
+    """
+    print 'Processing feature collecting ... ' + recording_name + ' phrase ' + str(idx + 1)
+
+    if not lab:
+        times_onset = [u[0] for u in u_list[1]]
+    else:
+        times_onset = [u[0] for u in u_list]
+
+    # syllable onset frames
+    frames_onset = np.array(np.around(np.array(times_onset) / hopsize_t), dtype=int)
+
+    # line start and end frames
+    frame_start = frames_onset[0]
+
+    if not lab:
+        frame_end = int(u_list[0][1] / hopsize_t)
+    else:
+        frame_end = int(u_list[-1][1] / hopsize_t)
+
+    return frames_onset, frame_start, frame_end
+

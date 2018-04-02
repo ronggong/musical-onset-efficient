@@ -40,6 +40,7 @@ def featureDereshape(feature, nlen=10):
             feature_dereshape[ii][n_row*jj:n_row*(jj+1)] = feature[ii][:,jj]
     return feature_dereshape
 
+
 def getRecordings(wav_path):
     recordings      = []
     for root, subFolders, files in os.walk(wav_path):

@@ -17,6 +17,7 @@ from sample_collection_helper import feature_label_concatenation_h5py
 from sample_collection_helper import positive_three_sample_weighting
 from sample_collection_helper import simple_sample_weighting
 from sample_collection_helper import feature_onset_phrase_label_sample_weights
+from sample_collection_helper import get_onset_in_frame_helper
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../src/"))
 
@@ -87,36 +88,6 @@ def dump_feature_onset_helper(lab,
     return nested_utterance_lists, utterance_durations, bpm, mfcc
 
 
-def get_onset_in_frame_helper(recording_name, idx, lab, u_list):
-    """
-    retrieve onset time of the syllable from textgrid
-    :param recording_name:
-    :param idx:
-    :param lab:
-    :param u_list:
-    :return:
-    """
-    print 'Processing feature collecting ... ' + recording_name + ' phrase ' + str(idx + 1)
-
-    if not lab:
-        times_onset = [u[0] for u in u_list[1]]
-    else:
-        times_onset = [u[0] for u in u_list]
-
-    # syllable onset frames
-    frames_onset = np.array(np.around(np.array(times_onset) / hopsize_t), dtype=int)
-
-    # line start and end frames
-    frame_start = frames_onset[0]
-
-    if not lab:
-        frame_end = int(u_list[0][1] / hopsize_t)
-    else:
-        frame_end = int(u_list[-1][1] / hopsize_t)
-
-    return frames_onset, frame_start, frame_end
-
-
 def dump_feature_sample_weights_onset(wav_path,
                                       textgrid_path,
                                       score_path,
@@ -185,6 +156,7 @@ def dump_feature_sample_weights_onset(wav_path,
            np.concatenate(sample_weights_p_all), \
            np.concatenate(sample_weights_n_all)
 
+
 def save_feature_label_sample_weights_onset_phrase(wav_path,
                                                    textgrid_path,
                                                    score_path,
@@ -207,12 +179,12 @@ def save_feature_label_sample_weights_onset_phrase(wav_path,
     for artist_name, recording_name in recordings:
 
         nested_utterance_lists, utterance_durations, bpm, mfcc = dump_feature_onset_helper(lab,
-                                                                                         wav_path,
-                                                                                         textgrid_path,
-                                                                                         score_path,
-                                                                                         artist_name,
-                                                                                         recording_name,
-                                                                                         feature_type)
+                                                                                           wav_path,
+                                                                                           textgrid_path,
+                                                                                           score_path,
+                                                                                           artist_name,
+                                                                                           recording_name,
+                                                                                           feature_type)
 
         # create the ground truth lab files
         for idx, u_list in enumerate(nested_utterance_lists):
@@ -418,7 +390,7 @@ def dump_feature_batch_onset_phrase(split='ismir', feature_type='mfccBands2D', t
         scaler = preprocessing.StandardScaler()
         scaler.fit(mfcc_all)
 
-        filename_scaler = join(jingju_scaler_path,
+        filename_scaler = join(jingju_cnn_model_path,
                                'scaler_syllable_mfccBands2D_old+new_'+split+'_'+feature_type+'_'+'phrase'+'.pkl')
 
         pickle.dump(scaler, open(filename_scaler, 'wb'))

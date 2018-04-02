@@ -54,19 +54,19 @@ def dump_feature_onset_helper(audio_path, annotation_path, fn, channel):
 def feature_data_path_switcher(sampleWeighting, channel):
 
     if sampleWeighting == 'complicate':
-        feature_path = schluter_feature_data_path_madmom_complicateSampleWeighting
+        feature_path = bock_feature_data_path_madmom_complicateSampleWeighting
     elif sampleWeighting == 'positiveThree':
-        feature_path = schluter_feature_data_path_madmom_positiveThreeSampleWeighting
+        feature_path = bock_feature_data_path_madmom_positiveThreeSampleWeighting
     else:
         if channel == 1:
-            feature_path = schluter_feature_data_path_madmom_simpleSampleWeighting
+            feature_path = bock_feature_data_path_madmom_simpleSampleWeighting
         else:
-            feature_path = schluter_feature_data_path_madmom_simpleSampleWeighting_3channel
+            feature_path = bock_feature_data_path_madmom_simpleSampleWeighting_3channel
 
     return feature_path
 
 
-def feature_label_weights_saver(feature_path, feature_all, label_all, sample_weights):
+def feature_label_weights_saver(feature_path, fn, feature_all, label_all, sample_weights):
 
     filename_feature_all = join(feature_path, 'feature_' + fn + '.h5')
     h5f = h5py.File(filename_feature_all, 'w')
@@ -143,13 +143,13 @@ def dump_feature_onset_phrase(audio_path,
     mfcc_line, label, sample_weights = \
         feature_onset_phrase_label_sample_weights(frames_onset, frame_start, frame_end, mfcc)
 
-    feature_path = schluter_feature_data_path_madmom_simpleSampleWeighting_phrase
+    feature_path = bock_feature_data_path_madmom_simpleSampleWeighting_phrase
 
     if not os.path.exists(feature_path):
         os.makedirs(feature_path)
 
     # save feature, label and weights
-    feature_label_weights_saver(feature_path, mfcc_line, label, sample_weights)
+    feature_label_weights_saver(feature_path, fn, mfcc_line, label, sample_weights)
 
     return mfcc_line
 
@@ -174,9 +174,9 @@ if __name__ == '__main__':
 
     if args.phrase:
         mfcc_line_all = []
-        for fn in getRecordings(schluter_annotations_path):
-            mfcc_line = dump_feature_onset_phrase(audio_path=schluter_audio_path,
-                                                  annotation_path=schluter_annotations_path,
+        for fn in getRecordings(bock_annotations_path):
+            mfcc_line = dump_feature_onset_phrase(audio_path=bock_audio_path,
+                                                  annotation_path=bock_annotations_path,
                                                   fn=fn,
                                                   channel=1)
             mfcc_line_all.append(mfcc_line)
@@ -187,7 +187,7 @@ if __name__ == '__main__':
 
         scaler.fit(mfcc_line_all)
 
-        pickle.dump(scaler, open(scaler_schluter_phrase_model_path, 'wb'))
+        pickle.dump(scaler, open(scaler_bock_phrase_model_path, 'wb'))
     # else:
     #     for fn in getRecordings(schluter_annotations_path):
     #         dump_feature_onset(audio_path=schluter_audio_path,
