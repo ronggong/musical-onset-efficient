@@ -4,8 +4,6 @@
 import numpy as np
 import h5py
 import pickle
-import cPickle
-import gzip
 import os
 import sys
 
@@ -73,11 +71,9 @@ def feature_label_weights_saver(feature_path, fn, feature_all, label_all, sample
     h5f.create_dataset('feature_all', data=feature_all)
     h5f.close()
 
-    cPickle.dump(label_all,
-                 gzip.open(join(feature_path, 'label_' + fn + '.pickle.gz'), 'wb'), protocol=2)
+    pickle.dump(label_all, open(join(feature_path, 'label_' + fn + '.pkl'), 'wb'), protocol=2)
 
-    cPickle.dump(sample_weights,
-                 gzip.open(join(feature_path, 'sample_weights_' + fn + '.pickle.gz'), 'wb'), protocol=2)
+    pickle.dump(sample_weights, open(join(feature_path, 'sample_weights_' + fn + '.pkl'), 'wb'), protocol=2)
 
 
 def dump_feature_onset(audio_path,
@@ -187,7 +183,7 @@ if __name__ == '__main__':
 
         scaler.fit(mfcc_line_all)
 
-        pickle.dump(scaler, open(scaler_bock_phrase_model_path, 'wb'))
+        pickle.dump(scaler, open(join(feature_data_path, 'scaler_bock_phrase.pkl'), 'wb'))
     # else:
     #     for fn in getRecordings(schluter_annotations_path):
     #         dump_feature_onset(audio_path=schluter_audio_path,

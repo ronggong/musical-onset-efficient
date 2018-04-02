@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import cPickle
-import gzip
 import os
 import pickle
 import sys
@@ -202,7 +200,7 @@ def save_feature_label_sample_weights_onset_phrase(wav_path,
                     feature_onset_phrase_label_sample_weights(frames_onset, frame_start, frame_end, mfcc)
 
                 # save feature, label, sample weights
-                feature_data_split_path = join(feature_data_path, split)
+                feature_data_split_path = join(feature_data_path, 'jingju_phrase')
                 if not os.path.exists(feature_data_split_path):
                     os.makedirs(feature_data_split_path)
 
@@ -215,14 +213,14 @@ def save_feature_label_sample_weights_onset_phrase(wav_path,
 
                 # dumpy label in pickle.gz
                 filename_label = join(feature_data_split_path,
-                                      'label'+'_'+artist_name + '_' +recording_name+'_'+str(idx)+'.pickle.gz')
-                cPickle.dump(label, gzip.open(filename_label, 'wb'), cPickle.HIGHEST_PROTOCOL)
+                                      'label'+'_'+artist_name + '_' +recording_name+'_'+str(idx)+'.pkl')
+                pickle.dump(label, open(filename_label, 'wb'), protocol=2)
 
                 # dump sample weights in pickle.gz
                 filename_sample_weights = join(feature_data_split_path,
                                                'sample_weights' + '_' + artist_name + '_' +
-                                               recording_name + '_' + str(idx) + '.pickle.gz')
-                cPickle.dump(sample_weights, gzip.open(filename_sample_weights, 'wb'), cPickle.HIGHEST_PROTOCOL)
+                                               recording_name + '_' + str(idx) + '.pkl')
+                pickle.dump(sample_weights, open(filename_sample_weights, 'wb'), protocol=2)
 
                 mfcc_line_all.append(mfcc_line)
 
@@ -332,20 +330,12 @@ def dump_feature_batch_onset(split='artist_filter',
 
     print('finished feature concatenation.')
 
-    cPickle.dump(label_all,
-                 gzip.open(join(feature_data_path,'labels_'+train_test+
-                                '_set_all_syllableSeg_mfccBands2D_old+new_'+split+
-                                '_'+feature_type+'_'+sampleWeighting + '.pickle.gz'), 'wb'), protocol=2)
+    pickle.dump(label_all, open(join(feature_data_path, 'labels.pkl'), 'wb'), protocol=2)
 
     if train_test == 'train':
-        cPickle.dump(sample_weights,
-                     gzip.open(join(feature_data_path, 'sample_weights_syllableSeg_mfccBands2D_old+new_'+
-                               split+'_'+feature_type+'_'+sampleWeighting + '.pickle.gz'),'wb'), protocol=2)
+        pickle.dump(sample_weights, open(join(feature_data_path, 'sample_weights.pkl'),'wb'), protocol=2)
 
-        pickle.dump(scaler,
-                    open(join(cnnModels_path, varin['sample_weighting'],
-                              'scaler_syllable_mfccBands2D_old+new_'+split+
-                              '_'+feature_type+'.pkl'), 'wb'), protocol=2)
+        pickle.dump(scaler, open(join(feature_data_path, 'scaler.pkl'), 'wb'), protocol=2)
 
 
 def dump_feature_batch_onset_phrase(split='ismir', feature_type='mfccBands2D', train_test='train'):
@@ -390,8 +380,7 @@ def dump_feature_batch_onset_phrase(split='ismir', feature_type='mfccBands2D', t
         scaler = preprocessing.StandardScaler()
         scaler.fit(mfcc_all)
 
-        filename_scaler = join(jingju_cnn_model_path,
-                               'scaler_syllable_mfccBands2D_old+new_'+split+'_'+feature_type+'_'+'phrase'+'.pkl')
+        filename_scaler = join(feature_data_path, 'scaler_jingju_phrase'+'.pkl')
 
         pickle.dump(scaler, open(filename_scaler, 'wb'))
 
@@ -434,15 +423,11 @@ def dump_feature_batch_onset_test():
 
     print(mfcc_p.shape, mfcc_n.shape)
 
-    h5f = h5py.File(join(feature_data_path,
-                         'feature_test_set_all_syllableSeg_mfccBands2D_old+new_artist_filter_madmom.h5', 'w'))
+    h5f = h5py.File(join(feature_data_path, 'feature_test_set.h5', 'w'))
     h5f.create_dataset('feature_all', data=feature_all)
     h5f.close()
 
-    cPickle.dump(label_all,
-                 gzip.open(join(feature_data_path,
-                                'label_test_set_all_syllableSeg_mfccBands2D_old+new_artist_filter_madmom.pickle.gz'),
-                                'wb'), protocol=2)
+    pickle.dump(label_all, open(join(feature_data_path, 'label_test_set.pkl'), 'wb'), protocol=2)
 
 
 if __name__ == '__main__':
