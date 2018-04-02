@@ -15,6 +15,8 @@ from utilFunctions import smooth_obs
 from training_scripts.models_CRNN import jan_original
 from plot_code import plot_jingju_odf_colab
 
+from madmom.features.onsets import OnsetPeakPickingProcessor
+
 
 def feature_preprocessing(feature, scaler):
     # scale feature
@@ -53,7 +55,7 @@ path_scaler_bock = os.path.join(path_models_bock, 'scaler_bock_0.pickle.gz')
 scaler_bock = cPickle.load(gzip.open(path_scaler_bock))
 
 # load score
-nested_list, syllable_duration = pickle.load(open('./inputs/input_jingju_5.pkl', 'r'))
+boundary_groundtruth, syllable_duration = pickle.load(open('./inputs/input_jingju_5.pkl', 'r'))
 
 # load audio
 log_mel = getMFCCBands2DMadmom(wav_jingju, fs, hopsize_t, channel=1)
@@ -197,7 +199,7 @@ model_feature_extractor_b = load_model(os.path.join(path_models_jingju, 'feature
 odf_feature_extractor_b = model_feature_extractor_b.predict([log_mel_jingju_no_rnn, log_mel_jingju_no_rnn], batch_size=128, verbose=2)
 odf_feature_extractor_b = odf_postprocessing(odf_feature_extractor_b)
 
-# plot
+# plot ODFs, red lines in the mel bands are ground truth boundaries
 plot_jingju_odf_colab(log_mel=log_mel,
                       hopsize_t=hopsize_t,
                       odf_baseline=odf_baseline,
@@ -212,4 +214,5 @@ plot_jingju_odf_colab(log_mel=log_mel,
                       odf_pretrained=odf_pretrained,
                       odf_retrained=odf_retrained,
                       odf_feature_extractor_a=odf_feature_extractor_a,
-                      odf_feature_extractor_b=odf_feature_extractor_b)
+                      odf_feature_extractor_b=odf_feature_extractor_b,
+                      groundtruth=boundary_groundtruth)

@@ -1,5 +1,5 @@
-# import matplotlib
-# matplotlib.use('Tkagg')
+import matplotlib
+matplotlib.use('Tkagg')
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -106,15 +106,35 @@ def plot_jingju_odf_colab(log_mel,
                           odf_pretrained,
                           odf_retrained,
                           odf_feature_extractor_a,
-                          odf_feature_extractor_b):
+                          odf_feature_extractor_b,
+                          groundtruth=None,
+                          b_baseline=None,
+                          b_relu_dense=None,
+                          b_no_dense=None,
+                          b_temporal=None,
+                          b_bidi_lstms_100=None,
+                          b_bidi_lstms_200=None,
+                          b_bidi_lstms_400=None,
+                          b_9_layers_cnn=None,
+                          b_5_layers_cnn=None,
+                          b_pretrained=None,
+                          b_retrained=None,
+                          b_feature_extractor_a=None,
+                          b_feature_extractor_b=None):
 
-    # plot Error analysis figures
+    # plot onset detection figure
     plt.figure(figsize=(16, 26))
     # class weight
     ax1 = plt.subplot(14, 1, 1)
     y = np.arange(0, 80)
     x = np.arange(0, log_mel.shape[0]) * hopsize_t
     plt.pcolormesh(x, y, np.transpose(log_mel[:, 80 * 7:80 * 8]))
+
+    if groundtruth:
+        ground_truth_onset = [l[0] - groundtruth[1][0][0] for l in groundtruth[1]]
+        for i_gs, gs in enumerate(ground_truth_onset):
+            plt.axvline(gs, color='r', linewidth=2)
+
     ax1.set_ylabel('Mel bands', fontsize=12)
     ax1.get_xaxis().set_visible(False)
     ax1.axis('tight')
@@ -157,12 +177,12 @@ def plot_jingju_odf_colab(log_mel,
 
     ax9 = plt.subplot(14, 1, 9, sharex=ax1)
     plt.plot(np.arange(0, len(odf_9_layers_cnn)) * hopsize_t, odf_9_layers_cnn)
-    ax9.set_ylabel('ODF \n9 layers CNN', fontsize=12)
+    ax9.set_ylabel('ODF\n9 layers CNN', fontsize=12)
     ax9.axis('tight')
 
     ax10 = plt.subplot(14, 1, 10, sharex=ax1)
     plt.plot(np.arange(0, len(odf_5_layers_cnn)) * hopsize_t, odf_5_layers_cnn)
-    ax10.set_ylabel('ODF \n5 layers CNN', fontsize=12)
+    ax10.set_ylabel('ODF\n5 layers CNN', fontsize=12)
     ax10.axis('tight')
 
     ax11 = plt.subplot(14, 1, 11, sharex=ax1)
