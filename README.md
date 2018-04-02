@@ -30,6 +30,23 @@ python reproduce_experiment_results.py -d jingju -a archi
 ```bash
 python reproduce_experiment_results.py -d bock -a archi
 ```
+
+### A.2 General code for training set feature, label and sample weights extraction
+In case that you want to extract the feature, label and sample weights for your own dataset:
+1. We assume that your training set audio and annotation are stored in folders `path_audio` and `path_annotation`.
+2. Your annotation should conform to either jingju or Böck annotation format. Jingju annotation is stored in
+[Praat textgrid file](http://www.fon.hum.uva.nl/praat/manual/TextGrid_file_formats.html). 
+In our [jingju textgrid annotations](https://drive.google.com/drive/folders/17mo5FuWyEHkCFRExKRLGXFcQk2n-jMEW?usp=sharing),
+two tiers are parsed: `line` and `dianSilence`; The former contains musical line (phrase) level onsets, and the latter
+contains syllable level onsets. We assume that you also annotated your audio file in this kind of hierarchical format:
+`tier_parent` and `tier_child` corresponding to `line` and `dianSilence`. Böck dataset is annotated at each onset time, 
+you can check Böck dataset's annotation in this [link](https://github.com/CPJKU/onset_db),
+3. Run below command line to extract features for your dataset:
+```bash
+python ./trainingSetFeatureExtraction/training_data_collection_general.py --audio <path_audio> --annotation <path_annotation> --output <path_output> --annotation_type <jingju or bock> --phrase <bool> --tier_parent <string e.g. line> --tier_child <string e.g. dianSilence>
+```
+`--phrase` decides that if you want to extract the feature at file-level. If false is selected, 
+you will get a single feature file for the entire input folder.
 ## B. Supplementary information
 ### B.1 Pretrained models:
 [pretrained models link](https://drive.google.com/open?id=1DFB53P4Fz_ixoVFd9fMpW7nvstaK_wuA)
