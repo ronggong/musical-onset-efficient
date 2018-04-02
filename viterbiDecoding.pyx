@@ -89,7 +89,7 @@ def viterbiSegmental2(P, sd, param_s):
     cdef double [::1] cdelta_current = delta_current
 
     for t in range(1,T - 1):
-        print(t)
+        # print(t)
         # % duration probability
         Ps, _, _  = FdurationProba2(sd[t], param_s)
         Ps[Ps == 0]     = value_eps
