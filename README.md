@@ -131,12 +131,16 @@ the details.
 
 `_peakPickingMadmom` first 5 rows format:
 
+<center>
+
 |              onset selection method             |
 |:-----------------------------------------------:|
 | best threshold searched on the holdout test set |
 |                    Precision                    |
 |                      Recall                     |
 |                    F1-measure                   |
+
+</center>
 
 `_viterbi_nolabel` first 5 rows format:
 
