@@ -1,10 +1,11 @@
 # An efficient and reproducible deep learning model for musical onset detection
 
 The code aims to reproduce the results in the work:
->Towards an efficient and reproducible deep learning model for musical onset detection
+
+**Towards an efficient and reproducible deep learning model for musical onset detection**
 ___
 
-A plot of the onset detection functions tested in the paper. Red lines in the Mel bands plot 
+Below is a plot of the onset detection functions tested in the paper. Red lines in the Mel bands plot 
 are the ground truth syllable onset positions, and those in the other plots are the detected onset positions by using 
 peak-picking onset selection method.
 
@@ -20,12 +21,12 @@ The code of the demo is in the [colab_demo](https://github.com/musicalOnset-ismi
 * [A.1 Install dependencies](#a1-install-dependencies)
 * [A.2 Reproduce the experiment results with pretrained models](#a2-reproduce-the-experiment-results-with-pretrained-models)
 * [A.3 General code for training data extraction](#a3-general-code-for-training-data-extraction)
-* [A.4 Specific code for jingju and Böck datasets training data extraction](#a4-specific-code-for-jingju-and-bock-datasets-training-data-extraction)  
+* [A.4 Specific code for jingju and Böck datasets training data extraction](#a4-specific-code-for-jingju-and-böck-datasets-training-data-extraction)  
 * [A.5 Train the model from the training data](#a5-train-the-model-from-the-training-data)  
     
 [B. Supplementary information](#b-supplementary-information)
 * [B.1 Pretrained models](#b1-pretrained-models)
-* [B.2 Full results (precision, recall, F1)](#b2-full-results-precision-recall-F1)
+* [B.2 Full results (precision, recall, F1)](#b2-full-results-precision-recall-f1)
 * [B.3 Statistical significance calculation data](#b3-statistical-significance-calculation-data)
 * [B.4 Loss curves (section 5.1 in the paper)](#b4-loss-curves-section-51-in-the-paper)
 
@@ -146,7 +147,6 @@ the details.
 |                          Recall                          |
 |                        F1-measure                        |
 
-___
 
 In Böck folder, there is only one file for each model, and its format is:
 
@@ -163,6 +163,7 @@ These loss curves aim o show the overfitting of Bidi LSTMs 100 and 200 models
  for Böck dataset and 9-layers CNN for both datasets.
 
 Böck dataset Bidi LSTMs 100 losses (fold 2)
+
 ![bidi_lstms_100_Bock](figs/loss/bidi_lstms_100_bock.png)
 
 Böck dataset Bidi LSTMs 200 losses (fold 3)
