@@ -2,9 +2,8 @@ import sys, os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from data_preparation_jingju_phrase import getTrainingFilenames
-from data_preparation_CRNN import featureLabelSampleWeightsLoad
-from data_preparation_CRNN import featureLabelSampleWeightsPad
+from data_preparation_schluter import getTrainingFilenames
+from data_preparation_CRNN import featureLabelSampleWeightsLoad, featureLabelSampleWeightsPad
 from data_preparation_CRNN import createInputTensor
 from data_preparation_CRNN import writeValLossCsv
 from models_CRNN import jan_original
@@ -70,16 +69,21 @@ def loss_cal(fns, data_path, scaler, model, len_seq):
     return loss
 
 
-def run_training_process(path_input, path_output, ii, len_seq, bidi=True):
+def run_bock_training(path_input,
+                      path_output,
+                      bock_cv_path,
+                      bock_annotations_path,
+                      len_seq,
+                      ii,
+                      bidi=True):
 
-    file_path_model = os.path.join(path_output, 'bidi_lstms_'+ str(len_seq) + str(ii) + '.h5')
-    file_path_log = os.path.join(path_output, 'bidi_lstms_'+ str(len_seq) + str(ii) + '.csv')
+    file_path_model = os.path.join(path_output, 'bidi_lstms_' + str(len_seq) + str(ii) + '.h5')
+    file_path_log = os.path.join(path_output, 'bidi_lstms_' + str(len_seq) + str(ii) + '.csv')
 
-    jingju_feature_data_scratch_path = os.path.join(path_input)
+    bock_feature_data_scratch_path = os.path.join(path_input)
 
-    scaler = pickle.load(open(os.path.join(path_input, 'scaler_jingju_phrase.pkl'), 'r'))
-
-    train_validation_fns = getTrainingFilenames(jingju_feature_data_scratch_path)
+    test_cv_filename = os.path.join(bock_cv_path, '8-fold_cv_random_' + str(ii) + '.fold')
+    train_validation_fns = getTrainingFilenames(bock_annotations_path, test_cv_filename)
 
     # split the training set to train and validation sets
     train_fns, validation_fns = None, None
@@ -88,11 +92,13 @@ def run_training_process(path_input, path_output, ii, len_seq, bidi=True):
         train_fns = [train_validation_fns[ti] for ti in train_idx]
         validation_fns = [train_validation_fns[vi] for vi in validation_idx]
 
+    scaler = pickle.load(open(os.path.join(path_input, 'scaler_bock_phrase.pkl'), 'r'))
+
     batch_size = 256
     nb_epochs = 500
     best_val_loss = 1.0  # initialize the val_loss
     counter = 0
-    patience = 15   # early stopping patience
+    patience = 15  # early stopping patience
     overlap = 10  # overlap frames
 
     input_shape = (batch_size, len_seq, 1, 80, 15)
@@ -106,8 +112,6 @@ def run_training_process(path_input, path_output, ii, len_seq, bidi=True):
                          channel=1,
                          stateful=False,
                          bidi=bidi)
-
-    model.summary()
 
     input_shape_val = (1, len_seq, 1, 80, 15)
 
@@ -133,7 +137,7 @@ def run_training_process(path_input, path_output, ii, len_seq, bidi=True):
         # training
         for tfn in train_fns:
 
-            mfcc_line, label, sample_weights = featureLabelSampleWeightsLoad(jingju_feature_data_scratch_path,
+            mfcc_line, label, sample_weights = featureLabelSampleWeightsLoad(bock_feature_data_scratch_path,
                                                                              tfn,
                                                                              scaler)
 
@@ -155,19 +159,20 @@ def run_training_process(path_input, path_output, ii, len_seq, bidi=True):
                 sample_weights_tensor[batch_counter, :] = sample_weights_seg
 
                 if batch_counter >= batch_size - 1:
-                    train_loss_batch, train_acc_batch = model.train_on_batch(mfcc_line_tensor,
-                                                                             label_tensor,
-                                                                             sample_weight=sample_weights_tensor)
+                    train_loss, train_acc = model.train_on_batch(mfcc_line_tensor,
+                                                                 label_tensor,
+                                                                 sample_weight=sample_weights_tensor)
                     batch_counter = 0
                 else:
                     batch_counter += 1
 
+        # get weights for val
         weights_trained = model.get_weights()
         model_val.set_weights(weights_trained)
 
         # calculate losses
-        train_loss = loss_cal(train_fns, jingju_feature_data_scratch_path, scaler, model_val, len_seq)
-        val_loss = loss_cal(validation_fns, jingju_feature_data_scratch_path, scaler, model_val, len_seq)
+        train_loss = loss_cal(train_fns, bock_feature_data_scratch_path, scaler, model_val, len_seq)
+        val_loss = loss_cal(validation_fns, bock_feature_data_scratch_path, scaler, model_val, len_seq)
 
         # save the best model
         if val_loss < best_val_loss:
@@ -185,6 +190,3 @@ def run_training_process(path_input, path_output, ii, len_seq, bidi=True):
             break
 
         random.shuffle(train_fns)
-
-if __name__ == '__main__':
-    run_training_process(0, 'ismir', bidi=True)

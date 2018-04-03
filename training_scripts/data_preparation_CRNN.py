@@ -2,9 +2,9 @@ import h5py
 import pickle
 import numpy as np
 import csv
+import sys
+import os
 
-
-import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 from utilFunctions import featureReshape
@@ -38,7 +38,6 @@ def featureLabelSampleWeightsPad(mfcc_line, label, sample_weights, len_seq):
     :param len_seq: sequence length
     :return:
     """
-
 
     # length of the paded sequence
     len_2_pad = int(len_seq * np.ceil(len(mfcc_line)/float(len_seq)))

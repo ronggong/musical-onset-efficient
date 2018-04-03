@@ -1,18 +1,19 @@
-import sys, os
+import sys
+import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 from schluterParser import annotationCvParser
 from file_path_bock import *
-from parameters_jingju import *
 from utilFunctions import getRecordings
 from utilFunctions import featureReshape
 from utilFunctions import featureDereshape
 from sklearn import preprocessing
-import gzip, cPickle
 from os.path import isfile
+import pickle
 import numpy as np
 import h5py
+
 
 def getTrainingFilenames(annotation_path, cv_filename):
     """
@@ -25,6 +26,7 @@ def getTrainingFilenames(annotation_path, cv_filename):
     test_fns = annotationCvParser(cv_filename)
     train_fns = [x for x in annotation_fns if x not in test_fns]
     return train_fns
+
 
 def concatenateFeatureLabelSampleweights(train_fns,
                                          schluter_feature_data_path,
@@ -40,8 +42,8 @@ def concatenateFeatureLabelSampleweights(train_fns,
     label_all = []
     sample_weights_all = []
     for fn in train_fns:
-        sample_weights_fn = join(schluter_feature_data_path, 'sample_weights_' + fn + '.pickle.gz')
-        label_fn = join(schluter_feature_data_path, 'label_'+fn+'.pickle.gz')
+        sample_weights_fn = join(schluter_feature_data_path, 'sample_weights_' + fn + '.pkl')
+        label_fn = join(schluter_feature_data_path, 'label_' + fn + '.pkl')
 
         if not isfile(sample_weights_fn):
             print(sample_weights_fn, 'not found.')
@@ -50,20 +52,20 @@ def concatenateFeatureLabelSampleweights(train_fns,
             print(label_fn, 'not found.')
             continue
 
-
-        with gzip.open(sample_weights_fn, 'rb') as f:
-            sample_weights = cPickle.load(f)
+        with open(sample_weights_fn, 'r') as f:
+            sample_weights = pickle.load(f)
             sample_weights_all.append(sample_weights)
 
-        with gzip.open(label_fn, 'rb') as f:
-            label = cPickle.load(f)
+        with open(label_fn, 'rb') as f:
+            label = pickle.load(f)
             label_all.append(label)
 
     sample_weights_all = np.concatenate(sample_weights_all)
     label_all = np.concatenate(label_all)
-    print(label_all)
+    # print(label_all)
 
-    nDims = 80*n_pattern
+    nDims = 80 * n_pattern
+
     if channel == 1:
         feature_all = np.zeros((len(label_all), nDims), dtype='float32')
     else:
@@ -72,7 +74,7 @@ def concatenateFeatureLabelSampleweights(train_fns,
     idx_start = 0
     for fn in train_fns:
         # print('Concatenating feature ...', fn, 'idx start', idx_start)
-        feature_fn = join(schluter_feature_data_path, 'feature_'+fn+'.h5')
+        feature_fn = join(schluter_feature_data_path, 'feature_' + fn + '.h5')
         if not isfile(feature_fn):
             print(feature_fn, 'not found.')
             continue
@@ -134,11 +136,11 @@ def concatenateFeatureLabelSampleweightsJingju(feature_schluter,
     # load jingju feature, labels and sample weights
     feature_jingju = h5py.File(filename_jingju_features, 'r')
 
-    with gzip.open(filename_jingju_labels, 'rb') as f:
-        label_jingju = cPickle.load(f)
+    with open(filename_jingju_labels, 'r') as f:
+        label_jingju = pickle.load(f)
 
-    with gzip.open(filename_jingju_sample_weights, 'rb') as f:
-        sample_weights_jingju = cPickle.load(f)
+    with open(filename_jingju_sample_weights, 'rb') as f:
+        sample_weights_jingju = pickle.load(f)
 
     # concatenate with bock dataset
     feature_all = np.vstack((feature_schluter, feature_jingju['feature_all']))
@@ -159,26 +161,24 @@ def concatenateFeatureLabelSampleweightsJingju(feature_schluter,
     return feature_all, label_all, sample_weights_all, scaler
 
 
-def saveFeatureLabelSampleweights(feature_all, label_all, sample_weights, scaler,
-                                  feature_fn, label_fn, sample_weights_fn, scaler_fn):
+def saveFeatureLabelSampleweights(feature_all,
+                                  label_all,
+                                  sample_weights,
+                                  scaler,
+                                  feature_fn,
+                                  label_fn,
+                                  sample_weights_fn,
+                                  scaler_fn):
+
     h5f = h5py.File(feature_fn, 'w')
     h5f.create_dataset('feature_all', data=feature_all)
     h5f.close()
 
-    cPickle.dump(label_all,
-                 gzip.open(
-                     label_fn,
-                     'wb'), cPickle.HIGHEST_PROTOCOL)
+    pickle.dump(label_all, open(label_fn, 'w'), protocol=2)
 
-    cPickle.dump(sample_weights,
-                 gzip.open(
-                     sample_weights_fn,
-                     'wb'), cPickle.HIGHEST_PROTOCOL)
+    pickle.dump(sample_weights, open(sample_weights_fn, 'w'), protocol=2)
 
-    cPickle.dump(scaler,
-                 gzip.open(
-                     scaler_fn,
-                     'wb'), cPickle.HIGHEST_PROTOCOL)
+    pickle.dump(scaler, open(scaler_fn, 'w'), protocol=2)
 
 
 if __name__ == '__main__':

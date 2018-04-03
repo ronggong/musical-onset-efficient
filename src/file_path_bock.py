@@ -3,13 +3,12 @@ from os.path import dirname
 from parameters_schluter import varin
 from file_path_shared import feature_data_path
 
+bock_dataset_root_path = '/media/gong/ec990efa-9ee0-4693-984b-29372dcea0d1/Data/RongGong/onsets'
 
 root_path = join(dirname(__file__), '..')
 
 weighting_str = \
     'simpleSampleWeighting' if varin['sample_weighting'] == 'simpleWeighting' else 'positiveThreeSampleWeighting'
-
-bock_dataset_root_path = '/media/gong/ec990efa-9ee0-4693-984b-29372dcea0d1/Data/RongGong/onsets'
 
 bock_audio_path = join(bock_dataset_root_path, 'audio')
 
@@ -30,7 +29,7 @@ bock_feature_data_path_madmom_positiveThreeSampleWeighting = \
     join(feature_data_path, 'bock_postiveThreeSampleWeighting')
 
 bock_feature_data_path_madmom_simpleSampleWeighting_phrase = \
-    join(feature_data_path, 'bock_simpleSampleWeighting_phrase')
+    join(feature_data_path, 'bock_phrase')
 
 bock_cnn_model_path = join(root_path, 'pretrained_models', 'bock', varin['sample_weighting'])
 

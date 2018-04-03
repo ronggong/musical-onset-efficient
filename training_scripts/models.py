@@ -769,34 +769,23 @@ def model_switcher(model_name,
                    dropout,
                    input_shape,
                    channel,
-                   deep,
-                   dense,
                    activation_dense,
                    model_pretrained=None):
 
-    if model_name == 'jan_original':
-        if deep == '5_layers_cnn':
-            model_0 = jan_original_5_layers_cnn(filter_density=filter_density,
-                                                dropout=dropout,
-                                                input_shape=input_shape,
-                                                batchNorm=False,
-                                                dense_activation=activation_dense,
-                                                channel=channel)
-        elif deep == '9_layers_cnn':
-            model_0 = jan_original_9_layers_cnn(filter_density=filter_density,
-                                                dropout=dropout,
-                                                input_shape=input_shape,
-                                                batchNorm=False,
-                                                dense_activation=activation_dense,
-                                                channel=channel)
-        else:
-            model_0 = jan_original(filter_density=filter_density,
-                                   dropout=dropout,
-                                   input_shape=input_shape,
-                                   batchNorm=False,
-                                   dense_activation=activation_dense,
-                                   channel=channel,
-                                   dense=dense)
+    if model_name == '5_layers_cnn':
+        model_0 = jan_original_5_layers_cnn(filter_density=filter_density,
+                                            dropout=dropout,
+                                            input_shape=input_shape,
+                                            batchNorm=False,
+                                            dense_activation=activation_dense,
+                                            channel=channel)
+    elif model_name == '9_layers_cnn':
+        model_0 = jan_original_9_layers_cnn(filter_density=filter_density,
+                                            dropout=dropout,
+                                            input_shape=input_shape,
+                                            batchNorm=False,
+                                            dense_activation=activation_dense,
+                                            channel=channel)
     elif model_name == 'feature_extractor_a':
         model_0 = jan_original_feature_extractor(model_pretrained=model_pretrained,
                                                  filter_density=filter_density,
@@ -813,7 +802,7 @@ def model_switcher(model_name,
                                                  type='b',
                                                  dense_activation=activation_dense,
                                                  channel=channel)
-    elif model_name == 'jordi_temporal_schluter':
+    elif model_name == 'temporal':
         model_0 = jordi_model_schluter(filter_density_1=2,
                                        filter_density_2=filter_density,
                                        pool_n_row=5,  # old 3
@@ -822,7 +811,25 @@ def model_switcher(model_name,
                                        input_shape=input_shape,
                                        dim='temporal')
     else:
-        model_0 = None
+        if model_name == 'baseline':
+            activation_dense = 'sigmoid'
+            dense = True
+        elif model_name == 'relu_dense':
+            activation_dense = 'relu'
+            dense = True
+        elif model_name == 'no_dense':
+            activation_dense = 'sigmoid'
+            dense = False
+        else:
+            raise ValueError("model name %s doesn't exist." % model_name)
+
+        model_0 = jan_original(filter_density=filter_density,
+                               dropout=dropout,
+                               input_shape=input_shape,
+                               batchNorm=False,
+                               dense_activation=activation_dense,
+                               channel=channel,
+                               dense=dense)
 
     return model_0
 
@@ -872,10 +879,8 @@ def train_model_validation(filename_train_validation_set,
                            input_shape,
                            file_path_model,
                            filename_log,
-                           model_name='jan_original',
-                           deep='nodeep',
+                           model_name='baseline',
                            activation_dense='sigmoid',
-                           dense=True,
                            channel=1):
     """
     train model with validation
@@ -892,9 +897,7 @@ def train_model_validation(filename_train_validation_set,
                              dropout=dropout,
                              input_shape=input_shape,
                              channel=channel,
-                             activation_dense=activation_dense,
-                             deep=deep,
-                             dense=dense)
+                             activation_dense=activation_dense)
 
     batch_size = 256
     patience = 15
@@ -922,8 +925,6 @@ def finetune_model_validation(filename_train_validation_set,
                               filename_log,
                               model_name,
                               path_model,
-                              deep='5_layers_cnn',
-                              dense=True,
                               channel=1):
     """
     train model with validation
@@ -947,8 +948,6 @@ def finetune_model_validation(filename_train_validation_set,
                                dropout=dropout,
                                input_shape=input_shape,
                                channel=channel,
-                               deep=deep,
-                               dense=dense,
                                model_pretrained=model_pretrained,
                                activation_dense='sigmoid')
         multi_inputs = True

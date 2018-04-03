@@ -50,7 +50,8 @@ if __name__ == '__main__':
         file_path_model = os.path.join(args.path_output, args.architecture + str(running_time) + '.h5')
         file_path_log = os.path.join(args.path_output, args.architecture + str(running_time) + '.csv')
 
-        if args.architecture == 'baseline':
+        if args.architecture in ['baseline', 'relu_dense', 'no_dense', 'temporal', '9_layers_cnn', '5_layers_cnn']:
+
             train_model_validation(filename_train_validation_set,
                                    filename_labels_train_validation_set,
                                    filename_sample_weights,
@@ -59,71 +60,10 @@ if __name__ == '__main__':
                                    input_shape=input_dim,
                                    file_path_model=file_path_model,
                                    filename_log=file_path_log,
-                                   model_name='jan_original',
-                                   activation_dense='sigmoid',
+                                   model_name=args.architecture,
                                    channel=1)
-        elif args.architecture == 'relu_dense':
-            train_model_validation(filename_train_validation_set,
-                                   filename_labels_train_validation_set,
-                                   filename_sample_weights,
-                                   filter_density=1,
-                                   dropout=0.5,
-                                   input_shape=input_dim,
-                                   file_path_model=file_path_model,
-                                   filename_log=file_path_log,
-                                   model_name='jan_original',
-                                   activation_dense='relu',
-                                   channel=1)
-        elif args.architecture == 'no_dense':
-            train_model_validation(filename_train_validation_set,
-                                   filename_labels_train_validation_set,
-                                   filename_sample_weights,
-                                   filter_density=1,
-                                   dropout=0.5,
-                                   input_shape=input_dim,
-                                   file_path_model=file_path_model,
-                                   filename_log=file_path_log,
-                                   model_name='jan_original',
-                                   activation_dense='sigmoid',
-                                   dense=False,
-                                   channel=1)
-        elif args.architecture == 'temporal':
-            train_model_validation(filename_train_validation_set,
-                                   filename_labels_train_validation_set,
-                                   filename_sample_weights,
-                                   filter_density=1,
-                                   dropout=0.5,
-                                   input_shape=input_dim,
-                                   file_path_model=file_path_model,
-                                   filename_log=file_path_log,
-                                   model_name='jordi_temporal_schluter',
-                                   activation_dense='sigmoid',
-                                   channel=1)
-        elif args.architecture == '5_layers_cnn':
-            train_model_validation(filename_train_validation_set,
-                                   filename_labels_train_validation_set,
-                                   filename_sample_weights,
-                                   filter_density=1,
-                                   dropout=0.5,
-                                   input_shape=input_dim,
-                                   file_path_model=file_path_model,
-                                   filename_log=file_path_log,
-                                   model_name='jan_original',
-                                   channel=1,
-                                   deep='5_layers_cnn')
-        elif args.architecture == '9_layers_cnn':
-            train_model_validation(filename_train_validation_set,
-                                   filename_labels_train_validation_set,
-                                   filename_sample_weights,
-                                   filter_density=1,
-                                   dropout=0.5,
-                                   input_shape=input_dim,
-                                   file_path_model=file_path_model,
-                                   filename_log=file_path_log,
-                                   model_name='jan_original',
-                                   channel=1,
-                                   deep='9_layers_cnn')
-        elif args.architecture == 'retrained':
+
+        elif args.architecture in ['retrained', 'feature_extractor_a', 'feature_extractor_b']:
             finetune_model_validation(filename_train_validation_set,
                                       filename_labels_train_validation_set,
                                       filename_sample_weights,
@@ -132,39 +72,10 @@ if __name__ == '__main__':
                                       input_shape=input_dim,
                                       file_path_model=file_path_model,
                                       filename_log=file_path_log,
-                                      model_name='retrained',
+                                      model_name=args.architecture,
                                       path_model=args.path_pretrained,
-                                      deep='5_layers_cnn',
-                                      dense=True,
                                       channel=1)
-        elif args.architecture == 'feature_extractor_a':
-            finetune_model_validation(filename_train_validation_set,
-                                      filename_labels_train_validation_set,
-                                      filename_sample_weights,
-                                      filter_density=1,
-                                      dropout=0.5,
-                                      input_shape=input_dim,
-                                      file_path_model=file_path_model,
-                                      filename_log=file_path_log,
-                                      model_name='feature_extractor_a',
-                                      path_model=args.path_pretrained,
-                                      deep='5_layers_cnn',
-                                      dense=True,
-                                      channel=1)
-        elif args.architecture == 'feature_extractor_b':
-            finetune_model_validation(filename_train_validation_set,
-                                      filename_labels_train_validation_set,
-                                      filename_sample_weights,
-                                      filter_density=1,
-                                      dropout=0.5,
-                                      input_shape=input_dim,
-                                      file_path_model=file_path_model,
-                                      filename_log=file_path_log,
-                                      model_name='feature_extractor_a',
-                                      path_model=args.path_pretrained,
-                                      deep='5_layers_cnn',
-                                      dense=True,
-                                      channel=1)
+
         elif args.architecture == 'bidi_lstms_100':
             jingju_crnn_basecode.run_training_process(path_input=args.path_input,
                                                       path_output=args.path_output,
