@@ -1,7 +1,7 @@
 # An efficient and reproducible deep learning model for musical onset detection
 
 The code aims to reproduce the results in the work:
->Toward an efficient and reproducible deep learning model for musical onset detection
+>Towards an efficient and reproducible deep learning model for musical onset detection
 
 For an interative code demo of this work,
 please check our [jupyter notebook](https://goo.gl/Y5KAFC). You should be able to "open with" google colaboratory 
@@ -38,7 +38,7 @@ python reproduce_experiment_results.py -d jingju -a archi
 python reproduce_experiment_results.py -d bock -a archi
 ```
 
-### A.2 General code for training set log-mel feature, label and sample weights extraction
+### A.2 General code for training data extraction
 In case that you want to extract the feature, label and sample weights for your own dataset:
 1. We assume that your training set audio and annotation are stored in folders `path_audio` and `path_annotation`.
 2. Your annotation should conform to either jingju or Böck annotation format. Jingju annotation is stored in
@@ -55,7 +55,7 @@ python ./trainingSetFeatureExtraction/training_data_collection_general.py --audi
 `--phrase` decides that if you want to extract the feature at file-level. If false is selected, 
 you will get a single feature file for the entire input folder.
 
-### A.3 Specific code for jingju and Böck datasets log-mel feature, label and sample weights extraction
+### A.3 Specific code for jingju and Böck datasets training data extraction
 In case the you want to extract the feature, label and sample weights for the jingu and Böck datasets,
 we provide the easy executable code for this purpose.
 1. Download dataset: [jingju](https://drive.google.com/open?id=17mo5FuWyEHkCFRExKRLGXFcQk2n-jMEW); Böck dataset

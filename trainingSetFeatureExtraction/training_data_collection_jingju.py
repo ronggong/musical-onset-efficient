@@ -323,19 +323,19 @@ def dump_feature_batch_onset(split='artist_filter',
     print('feature shape:', feature_all.shape)
 
     filename_feature_all = join(feature_data_path,
-                                'feature_all_'+split+'_'+feature_type+'_'+train_test+'_'+sampleWeighting+'.h5')
+                                'feature_jingju.h5')
     h5f = h5py.File(filename_feature_all, 'w')
     h5f.create_dataset('feature_all', data=feature_all)
     h5f.close()
 
     print('finished feature concatenation.')
 
-    pickle.dump(label_all, open(join(feature_data_path, 'labels.pkl'), 'wb'), protocol=2)
+    pickle.dump(label_all, open(join(feature_data_path, 'labels_jingju.pkl'), 'wb'), protocol=2)
 
     if train_test == 'train':
-        pickle.dump(sample_weights, open(join(feature_data_path, 'sample_weights.pkl'),'wb'), protocol=2)
+        pickle.dump(sample_weights, open(join(feature_data_path, 'sample_weights_jingju.pkl'),'wb'), protocol=2)
 
-        pickle.dump(scaler, open(join(feature_data_path, 'scaler.pkl'), 'wb'), protocol=2)
+        pickle.dump(scaler, open(join(feature_data_path, 'scaler_jingju.pkl'), 'wb'), protocol=2)
 
 
 def dump_feature_batch_onset_phrase(split='ismir', feature_type='mfccBands2D', train_test='train'):
