@@ -1,8 +1,8 @@
-# An efficient and reproducible deep learning model for musical onset detection
+# An efficient deep learning model for musical onset detection
 
 This repo contains code and supplementary information for the paper:
 
-**Towards an efficient and reproducible deep learning model for musical onset detection**
+**Towards an efficient and deep learning model for musical onset detection**
 
 The code aims to:
 1. reproduce the experimental results in this work.
@@ -17,7 +17,7 @@ peak-picking onset selection method.
 For an interactive code demo to generate this plot and explore our work,
 please check our [jupyter notebook](https://goo.gl/Y5KAFC). You should be able to "open with" google colaboratory 
 in you google drive, then "open in playground" to execute it block by block. 
-The code of the demo is in the [colab_demo](https://github.com/musicalOnset-ismir2018/musicalOnset-ismir2018/tree/colab_demo) branch.
+The code of the demo is in the [colab_demo](https://github.com/ronggong/musical-onset-efficient) branch.
 
 ![github_main](figs/github_main.png)
 
